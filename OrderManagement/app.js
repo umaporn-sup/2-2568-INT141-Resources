@@ -78,3 +78,22 @@ console.log('---')
 console.log(getCustomerNames(allOrders))
 console.log('---')
 console.log(searchOrdersByCustomer(allOrders, 'BOB'))
+
+//JSDate Extension
+console.log('---order#3---')
+const order3 = new Order({
+  id: 'O001',
+  customer: { name: 'Alice' },
+  createdAt: '2026-05-07T00:00:00Z'
+})
+// Assume today = 2026-05-07
+console.log(order3.getOrderAge()) //1
+console.log(order3.isRecentOrder(1)) //true
+console.log(order3.isRecentOrder(2)) // true
+console.log(order3.getCreatedAtByTimezone('Asia/Bangkok'))
+//UTC+07:00
+// Example Output: 5/7/2026, 7:00:00 AM
+console.log(order3.getCreatedAtByTimezone('Asia/Tokyo')) //UTC+09:00
+// Example Output: 5/7/2026, 9:00:00 AM
+console.log(order3.getCreatedAtByTimezone('America/New_York')) // UTC-04:00
+// Example Output: 5/6/2026, 8:00:00 PM
