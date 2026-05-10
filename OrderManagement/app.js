@@ -11,7 +11,10 @@ import {
   filterOrdersByStatus,
   getHighValueOrders,
   getCustomerNames,
-  searchOrdersByCustomer
+  searchOrdersByCustomer,
+  isValidCustomerName,
+  isValidOrderId,
+  searchOrdersByCustomerRegex
 } from './utils/orderUtils.js'
 import { pricingConfig } from './config/pricingConfig.js'
 
@@ -97,3 +100,27 @@ console.log(order3.getCreatedAtByTimezone('Asia/Tokyo')) //UTC+09:00
 // Example Output: 5/7/2026, 9:00:00 AM
 console.log(order3.getCreatedAtByTimezone('America/New_York')) // UTC-04:00
 // Example Output: 5/6/2026, 8:00:00 PM
+
+//Regular Expression Extension
+console.log('---')
+console.log(isValidOrderId('O123')) // true
+console.log(isValidOrderId('X123')) // false
+console.log(isValidCustomerName('Alice')) // true
+console.log(isValidCustomerName('Alice Tan')) // true
+console.log(isValidCustomerName('Alice123')) // false
+
+const orders = [
+  new Order({
+    id: 'O001',
+    customer: { name: 'Alice' }
+  }),
+  new Order({
+    id: 'O002',
+    customer: { name: 'Bob Lee' }
+  }),
+  new Order({
+    id: 'O003',
+    customer: { name: 'ALISON' }
+  })
+]
+console.log(searchOrdersByCustomerRegex(orders, 'ali'))

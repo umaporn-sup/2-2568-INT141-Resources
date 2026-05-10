@@ -19,3 +19,22 @@ export function searchOrdersByCustomer(orders, keyword) {
     order.customer.name.toLowerCase().includes(keyword.toLowerCase())
   )
 }
+
+//Regular Expression Extension
+
+export function isValidOrderId(orderId) {
+  const regex = /^O\d{3}$/
+  return regex.test(orderId)
+}
+export function isValidCustomerName(name) {
+  const regex = /^[A-Za-z ]+$/
+  return typeof name === 'string' && name.trim() !== '' && regex.test(name)
+}
+
+export function searchOrdersByCustomerRegex(orders, keyword) {
+  if (typeof keyword !== 'string' || keyword.trim() === '') {
+    return []
+  }
+  const regex = new RegExp(keyword, 'i')
+  return orders.filter((order) => regex.test(order.customer.name))
+}
