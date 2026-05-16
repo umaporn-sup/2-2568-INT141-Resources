@@ -1,6 +1,14 @@
 import { Order } from '../models/Order.js'
-
+import { Product } from '../models/Product.js'
 export function addItemToOrder(order, product, quantity) {
+  if (!(product instanceof Product)) throw new Error('Invalid Product')
+  if (!(order instanceof Order)) throw new Error('Invalid Order')
+  if (!product.isAvailable()) {
+    throw new Error('Product not available')
+  }
+  if (quantity <= 0) {
+    throw new Error('Invalid quantity')
+  }
   const existingProduct = order.items.find(
     (item) => item.productId === product.id
   )
@@ -25,4 +33,23 @@ export function updateItemQuantity(order, productId, quantity) {
     (item) => item.productId === productId
   )
   if (existingProduct) existingProduct.quantity += quantity
+}
+export function safeAddItemToOrder(order, product, quantity) {
+  try {
+    addItemToOrder(order, product, quantity)
+
+    return {
+      success: true,
+      message: 'Item added successfully',
+      data: order
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message,
+      data: null
+    }
+  } finally {
+    console.log('Add item Finished')
+  }
 }

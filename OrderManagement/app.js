@@ -4,7 +4,8 @@ import { Order } from './models/Order.js'
 import {
   addItemToOrder,
   removeItemFromOrder,
-  updateItemQuantity
+  updateItemQuantity,
+  safeAddItemToOrder
 } from './services/orderService.js'
 import { calculateTotal } from './services/priceService.js'
 import {
@@ -124,3 +125,30 @@ const orders = [
   })
 ]
 console.log(searchOrdersByCustomerRegex(orders, 'ali'))
+console.log('---')
+const order4 = new Order({
+  id: 'O002',
+  customer: { name: 'Bob Lee' }
+})
+const noStockProduct = new Product({
+  id: 'P001',
+  name: 'Laptop',
+  price: 30000,
+  category: 'Electronics',
+  stock: 0
+})
+//Success Case
+// const result4 = safeAddItemToOrder(order4, ipad, 2)
+
+//Error Case
+// const result4 = safeAddItemToOrder('order4', ipad, 2)
+// const result4 = safeAddItemToOrder(order4, 'ipad', 2)
+// const result4 = safeAddItemToOrder(order4, ipad, 0)
+const result4 = safeAddItemToOrder(order4, noStockProduct, 2)
+
+if (result4.success) {
+  console.log(result4.message)
+  console.log(result4.data)
+} else {
+  console.log('Error:', result4.message)
+}
